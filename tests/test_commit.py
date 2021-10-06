@@ -11,11 +11,7 @@ runner = CliRunner()
 
 def test_app_001(default_description: str):
     result = runner.invoke(app, [default_description, "--debug"])
-    assert result.exit_code == 0
-    assert "git commit -m " in result.stdout
-    assert "✨" in result.stdout
-    assert default_description in result.stdout
-    assert f"✨: {default_description}" in result.stdout
+    assert result.exit_code == 2
 
 
 def test_app_002(default_description: str, default_commit_type: str):
