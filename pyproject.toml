@@ -29,6 +29,7 @@ lint = [
     { "cmd" = "black sapi/ --check --diff --verbose" },
     { "cmd" = "flake8 sapi/" },
 ]
+format = "black fluffy_waffle/ tests/"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

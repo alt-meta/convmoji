@@ -24,7 +24,7 @@ jobs:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-test
       - name: Install dependencies
-        run: bash install-deps.sh
+        run: bash scripts/install-deps.sh
       - name: Run tests
         run: poetry run poe coverage
       - name: Upload coverage to Codecov

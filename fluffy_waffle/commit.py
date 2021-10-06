@@ -16,18 +16,18 @@ def validate_commit_type(type: str) -> str:
 
 @app.command()
 def commit(
-        description: str = typer.Argument(...),
-        commit_type: typing.Optional[str] = typer.Argument(
-            "feat", callback=validate_commit_type
-        ),
-        scope: typing.Optional[str] = typer.Argument(""),
-        body: typing.Optional[str] = typer.Argument(""),
-        footer: typing.Optional[str] = typer.Argument(""),
-        breaking_changes: str = typer.Option(default=""),
-        amend: bool = typer.Option(default=False, metavar="--amend"),
-        no_verify: bool = typer.Option(default=False, metavar="--no-verify"),
-        co_authored_by: typing.Optional[typing.List[str]] = typer.Option(None),
-        debug: bool = typer.Option(default=False, metavar="--debug")
+    description: str = typer.Argument(...),
+    commit_type: typing.Optional[str] = typer.Argument(
+        "feat", callback=validate_commit_type
+    ),
+    scope: typing.Optional[str] = typer.Argument(""),
+    body: typing.Optional[str] = typer.Argument(""),
+    footer: typing.Optional[str] = typer.Argument(""),
+    breaking_changes: str = typer.Option(default=""),
+    amend: bool = typer.Option(default=False, metavar="--amend"),
+    no_verify: bool = typer.Option(default=False, metavar="--no-verify"),
+    co_authored_by: typing.Optional[typing.List[str]] = typer.Option(None),
+    debug: bool = typer.Option(default=False, metavar="--debug"),
 ):
     cmd = CommitCmd(
         type=commit_type,

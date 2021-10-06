@@ -65,20 +65,17 @@ class CommitCmd(BaseModel):
 
         if self.co_authored_by is not None:
             message = "{0}\n{1}".format(
-                message, "\n".join(
+                message,
+                "\n".join(
                     [f"Co-authored-by: {author}" for author in self.co_authored_by]
-                )
+                ),
             )
 
         return message
 
     def __repr__(self):
         optional_args = (
-            "--amend "
-            if self.amend
-            else "" + "--no-verify "
-            if self.no_verify
-            else ""
+            "--amend " if self.amend else "" + "--no-verify " if self.no_verify else ""
         )
 
         if self.breaking_changes:
