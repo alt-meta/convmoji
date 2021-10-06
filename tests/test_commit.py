@@ -6,6 +6,7 @@ runner = CliRunner()
 
 
 # TODO: check types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# TODO: test short options -a --co --nv
 
 
 def test_app_001(default_description: str):
