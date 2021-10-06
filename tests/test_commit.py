@@ -120,6 +120,7 @@ def test_app_006(
             default_footer,
             "--breaking-changes",
             default_breaking_changes,
+            "--no-verify",
             "--debug",
         ],
     )
@@ -132,3 +133,4 @@ def test_app_006(
     assert default_body in result.stdout
     assert default_footer in result.stdout
     assert f"BREAKING CHANGE: {default_breaking_changes}" in result.stdout
+    assert "--no-verify" in result.stdout
