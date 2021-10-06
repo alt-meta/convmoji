@@ -24,7 +24,7 @@ jobs:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-lint
       - name: Install dependencies
-        run: install-deps.sh
+        run: bash install-deps.sh
       - name: Run lint
         run: |
           black sapi/ --check --diff --verbose
