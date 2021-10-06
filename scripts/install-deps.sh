@@ -2,4 +2,4 @@
 
 python3 -m pip install poetry
 poetry config virtualenvs.path false
-poetry install .
+poetry install

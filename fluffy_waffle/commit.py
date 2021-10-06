@@ -43,7 +43,7 @@ def commit(
     if debug:
         typer.echo(repr(cmd))
     else:
-        os.system(repr(cmd))  # pragma: no cover
+        os.system(repr(cmd))
 
 
 if __name__ == "__main__":
