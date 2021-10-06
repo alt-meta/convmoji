@@ -20,7 +20,6 @@ helpers = {
     "co-authored-by": "A string of authors formatted like:\
         --co-authored-by '<User user@no-reply> '\
         --co-authored-by '<User2 user2@no-reply>'",
-
 }
 
 
@@ -33,18 +32,26 @@ def validate_commit_type(type: str) -> str:
 def commit(
     description: str = typer.Argument(..., help=helpers["description"]),
     commit_type: typing.Optional[str] = typer.Argument(
-        ..., callback=validate_commit_type, help=helpers["commit_type"],
+        ...,
+        callback=validate_commit_type,
+        help=helpers["commit_type"],
     ),
     scope: typing.Optional[str] = typer.Argument(default="", help=helpers["scope"]),
     body: typing.Optional[str] = typer.Argument(default="", help=helpers["body"]),
     footer: typing.Optional[str] = typer.Argument(default="", help=helpers["footer"]),
-    breaking_changes: str = typer.Option(default="", help=helpers["breaking-changes"],),
+    breaking_changes: str = typer.Option(
+        default="",
+        help=helpers["breaking-changes"],
+    ),
     amend: bool = typer.Option(False, "--amend/ ", "-a/ ", help=helpers["amend"]),
     no_verify: bool = typer.Option(
         False, "--no-verify/ ", "--nv/ ", help=helpers["no-verify"]
     ),
     co_authored_by: typing.Optional[typing.List[str]] = typer.Option(
-        None, "--co-authored_by/ ", "--co/ ", help=helpers["co-authored-by"],
+        None,
+        "--co-authored_by/ ",
+        "--co/ ",
+        help=helpers["co-authored-by"],
     ),
     debug: bool = typer.Option(default=False, metavar="--debug"),
 ):
