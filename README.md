@@ -23,3 +23,23 @@ fluffy-waffle commit feature devscope "my commit message" --body "my body messag
 # If you want to see what to does without performing the action, run it with --debug
 fluffy-waffle commit feature devscope "my commit message" <MoreOptions> --debug
 ````
+
+## Types
+
+````json
+{
+    "feat": "✨",
+    "fix": "🐛",
+    "docs": "📚",
+    "style": "💎",
+    "refactor": "🔨",
+    "perf": "🚀",
+    "test": "🚨",
+    "build": "📦",
+    "ci": "👷",
+    "chore": "🔧"
+}
+````
+
+
+
