@@ -1,0 +1,6 @@
+[run]
+source = fluffy_waffle
+omit = fluffy_waffle/main.py
+
+[xml]
+output = coverage.xml

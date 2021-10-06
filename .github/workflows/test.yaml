@@ -1,0 +1,39 @@
+name: Test
+
+on:
+  push:
+    paths:
+      - "fluffy_waffle/*"
+      - "tests/*"
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      # Cache pip dir
+      - uses: actions/cache@v2
+        id: test-cache
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-test
+      - name: Install dependencies
+        run: install-deps.sh
+      - name: Run tests
+        run: poetry run poe coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          env_vars: OS,PYTHON
+          files: ./coverage.xml
+          fail_ci_if_error: true
+          flags: unittests
+          name: codecov-umbrella
+          verbose: true

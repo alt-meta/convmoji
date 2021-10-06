@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "fluffy-waffle"
+version = "0.1.0"
+description = "A simple cli tool to commit Conventional Commits."
+authors = ["arrrrrmin <info@dotarmin.info>", "defel <defel@no-reply>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+fluffy-waffle = "fluffy_waffle.commit:app"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = "^1.8.2"
+typer = "^0.4.0"
+
+[tool.poetry.dev-dependencies]
+black = "^21.9b0"
+pytest = "^6.2.5"
+flake8 = "^3.9.2"
+flake8-unused-arguments = "^0.0.6"
+pytest-cov = "^3.0.0"
+poethepoet = "^0.10.0"
+devtools = "^0.8.0"
+
+[tool.poe.tasks]
+clean-up = "rm -rf .pytest_cache dist/ ./**/__pycache__ .coverage .coverage.* coverage*.xml"
+coverage = "pytest --cov --cov-config=.coveragerc tests/ --cov-report xml"
+lint = [
+    { "cmd" = "black sapi/ --check --diff --verbose" },
+    { "cmd" = "flake8 sapi/" },
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
