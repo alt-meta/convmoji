@@ -26,6 +26,4 @@ jobs:
       - name: Install dependencies
         run: bash scripts/install-deps.sh
       - name: Run lint
-        run: |
-          black sapi/ --check --diff --verbose
-          flake8 sapi/
+        run: poetry run poe lint
