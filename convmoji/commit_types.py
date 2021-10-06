@@ -2,7 +2,7 @@ import typing
 
 from pydantic import BaseModel, validator, root_validator
 
-# via: https://gist.github.com/parmentf/359667bf23e08a1bd8241fbf47ecdef0
+# See: https://gist.github.com/parmentf/359667bf23e08a1bd8241fbf47ecdef0
 possible_commit_types = {
     "feat": "✨",
     "fix": "🐛",
@@ -23,13 +23,13 @@ class CommitType(BaseModel):
     emoji: typing.Optional[str]
 
     @validator("type")
-    def validate_commit_type(cls, v: str):
+    def validate_commit_type(cls, v: str):  # noqa: U100
         if v not in possible_commit_types.keys():
             raise ValueError(f"Commit type not in {possible_commit_types.keys()}")
         return v
 
     @root_validator
-    def find_emoji(cls, values: typing.Dict):
+    def find_emoji(cls, values: typing.Dict):  # noqa: U100
         values["emoji"] = possible_commit_types[values.get("type")]
         return values
 
@@ -45,24 +45,14 @@ class CommitCmd(BaseModel):
     no_verify: bool
     co_authored_by: typing.Optional[typing.List[str]]
 
-    # git-fluffy-waffle feature "my commit message"
-    # git-fluffy-waffle feature scope "my commit message"
-    # git-fluffy-waffle feature scope "my commit message" --ammend --no-verify (bearbeitet)
-    # https://gist.github.com/parmentf/359667bf23e08a1bd8241fbf47ecdef0
-    # git-fluffy-waffle feature scope "my commit message" --body "my body message" --footer "footer" --breacking-change "contains a breaking change" --ammend --no-verify (bearbeitet)
-
     def _message_formatter(self):
         message = self.description
-
         if self.body:
             message += f"\n\n{self.body}"
-
         if self.breaking_changes:
             self.footer = f"BREAKING CHANGE: {self.breaking_changes}\n{self.footer}"
-
         if self.footer:
             message += f"\n\n{self.footer}"
-
         if self.co_authored_by is not None:
             message = "{0}\n{1}".format(
                 message,
@@ -70,33 +60,15 @@ class CommitCmd(BaseModel):
                     [f"Co-authored-by: {author}" for author in self.co_authored_by]
                 ),
             )
-
         return message
 
     def __repr__(self):
         optional_args = (
             "--amend " if self.amend else "" + "--no-verify " if self.no_verify else ""
         )
-
         if self.breaking_changes:
             self.type = f"{self.type}‼️"
-
         message = self._message_formatter()
         if self.scope == "":
             return f'{commit_cmd_base} "{self.type}: {message}" {optional_args}'
-        return (
-            f'{commit_cmd_base} "{self.type}({self.scope}): {message}" {optional_args}'
-        )
-
-
-# class CommitEmoji(BaseModel):
-#     feat: ✨ ":sparkles:"
-#     fix: 🐛 ":bug:"
-#     docs: 📚 ":books:"
-#     style: 💎 ":gem:"
-#     refactor: 🔨 ":hammer:"
-#     perf: 🚀 ":rocket:"
-#     test: 🚨 ":rotating_light:"
-#     build: 📦 ":package:"
-#     ci: 👷 ":construction_worker:"
-#     chore: 🔧 ":wrench:"
+        return f'{commit_cmd_base} "{self.type}({self.scope}): {message}" {optional_args}'

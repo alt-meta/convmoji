@@ -4,7 +4,8 @@ import os
 import typing
 import typer
 
-from fluffy_waffle.commit_types import CommitType, CommitCmd
+from convmoji.commit_types import CommitType, CommitCmd
+
 
 app = typer.Typer()
 

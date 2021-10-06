@@ -1,0 +1,5 @@
+[flake8]
+ignore = D203, W503, E203
+exclude = .git, __pycache__, dist, __init__.py, pytest_cache
+max-complexity = 10
+max-line-length = 90

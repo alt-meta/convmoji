@@ -2,7 +2,7 @@
 
 import typer
 
-from fluffy_waffle import commit
+from convmoji import commit
 
 app = typer.Typer()
 app.add_typer(commit.app)

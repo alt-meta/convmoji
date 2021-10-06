@@ -1,20 +1,11 @@
 from typer.testing import CliRunner
 
-from fluffy_waffle.commit import app
+from convmoji.commit import app
 
 runner = CliRunner()
 
 
-# feat
-# fix
-# docs
-# style
-# refactor
-# perf
-# test
-# build
-# ci
-# chore
+# TODO: check types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
 
 
 def test_app_001(default_description: str):
@@ -35,9 +26,7 @@ def test_app_002(default_description: str, default_commit_type: str):
     assert f"✨: {default_description}" in result.stdout
 
 
-def test_app_003(
-    default_description: str, default_commit_type: str, default_scope: str
-):
+def test_app_003(default_description: str, default_commit_type: str, default_scope: str):
     result = runner.invoke(
         app, [default_description, default_commit_type, default_scope, "--debug"]
     )

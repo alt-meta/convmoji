@@ -1,6 +1,6 @@
 [run]
-source = fluffy_waffle
-omit = fluffy_waffle/main.py
+source = convmoji
+omit = convmoji/main.py  # Temp till we build the wizard
 
 [xml]
 output = coverage.xml

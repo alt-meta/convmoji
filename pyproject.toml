@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "fluffy-waffle"
+name = "convmoji"
 version = "0.1.0"
-description = "A simple cli tool to commit Conventional Commits."
+description = "A simple cli tool to commit Conventional Commits with emojis."
 authors = ["arrrrrmin <info@dotarmin.info>", "defel <defel@no-reply>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
-fluffy-waffle = "fluffy_waffle.commit:app"
+convmoji = "convmoji.commit:app"
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -22,14 +22,18 @@ pytest-cov = "^3.0.0"
 poethepoet = "^0.10.0"
 devtools = "^0.8.0"
 
+[tool.black]
+line-length = 90
+target-version = ['py38']
+
 [tool.poe.tasks]
 clean-up = "rm -rf .pytest_cache dist/ ./**/__pycache__ .coverage .coverage.* coverage*.xml"
 coverage = "pytest --cov --cov-config=.coveragerc tests/ --cov-report xml"
 lint = [
-    { "cmd" = "black sapi/ --check --diff --verbose" },
-    { "cmd" = "flake8 sapi/" },
+    { "cmd" = "black convmoji/ --check --diff --verbose" },
+    { "cmd" = "flake8 convmoji/" },
 ]
-format = "black fluffy_waffle/ tests/"
+format = "black convmoji/ tests/"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
