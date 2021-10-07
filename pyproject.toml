@@ -1,9 +1,19 @@
 [tool.poetry]
 name = "convmoji"
-version = "0.1.1"
+version = "0.1.2"
 description = "A simple cli tool to commit Conventional Commits with emojis."
 authors = ["arrrrrmin <info@dotarmin.info>", "defel <defel@no-reply>"]
+maintainers = ["arrrrrmin <info@dotarmin.info>", "defel <defel@no-reply>"]
+homepage = "https://github.com/KnowKit/convmoji"
 readme = "README.md"
+keywords = ["conventional", "commits", "emoji", "cli", "tool"]
+classifiers = [
+    "Environment :: Console",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: Utilities",
+]
 
 [tool.poetry.scripts]
 convmoji = "convmoji.commit:app"

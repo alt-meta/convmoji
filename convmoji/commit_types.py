@@ -41,8 +41,8 @@ class CommitCmd(BaseModel):
     body: typing.Optional[str]
     footer: typing.Optional[str]
     breaking_changes: typing.Optional[str]
-    amend: bool
-    no_verify: bool
+    amend: typing.Optional[bool]
+    no_verify: typing.Optional[bool]
     co_authored_by: typing.Optional[typing.List[str]]
 
     def _message_formatter(self):
@@ -63,9 +63,9 @@ class CommitCmd(BaseModel):
         return message
 
     def __repr__(self):
-        optional_args = (
-            "--amend " if self.amend else "" + "--no-verify " if self.no_verify else ""
-        )
+        optional_args = ""
+        optional_args += "--amend " if self.amend else ""
+        optional_args += "--no-verify " if self.no_verify else ""
         if self.breaking_changes:
             self.type = f"{self.type}‼️"
         message = self._message_formatter()

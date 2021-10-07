@@ -4,56 +4,95 @@ import os
 import typing
 import typer
 
-from convmoji import commit_types
+from convmoji import __version__, __homepage__, __pypi__, commit_types
 
 
 app = typer.Typer()
 helpers = {
     "description": "Commit message, as in 'git commit -m \"...\"'",
-    "commit_type": f"Either of [{','.join(commit_types.possible_commit_types.keys())}]",
+    "commit_type": f"Either of [{', '.join(commit_types.possible_commit_types.keys())}]",
     "scope": "Scope for commit (any string)",
     "body": "Body message for commit",
     "footer": "Footer message (formatted two blank lines below body)",
-    "breaking-changes": "Specially formatted message to show changes might break previous versions",  # noqa
+    "breaking-changes": "Specially formatted message to show changes might break \
+        previous versions",
     "amend": "Execute commit with --amend",
     "no-verify": "Execute commit with --no-verify",
     "co-authored-by": "A string of authors formatted like:\
         --co-authored-by '<User user@no-reply> '\
         --co-authored-by '<User2 user2@no-reply>'",
+    "debug": "Debug mode (does not execute commit)",
+    "info": "Prompt convmoji info (does not execute commit)",
+    "version": "Prompt convmoji version (does not execute commit)",
 }
 
 
-def validate_commit_type(type: str) -> str:
-    commit_type = commit_types.CommitType(type=type)
+def validate_commit_type(type_string: str) -> str:
+    commit_type = commit_types.CommitType(type=type_string)
     return commit_type.emoji
+
+
+def info_callback(value: bool):
+    if value is True:
+        typer.echo("convmoji")
+        typer.echo(f"version: {__version__}")
+        typer.echo(f"homepage: {__homepage__}")
+        typer.echo(f"pypi: {__pypi__}")
+        raise typer.Exit(code=0)
+
+
+def version_callback(value: bool):
+    if value is True:
+        typer.echo(f"convmoji {__version__}")
+        raise typer.Exit(code=0)
 
 
 @app.command()
 def commit(
     description: str = typer.Argument(..., help=helpers["description"]),
     commit_type: typing.Optional[str] = typer.Argument(
-        ...,
+        "feat",
         callback=validate_commit_type,
         help=helpers["commit_type"],
     ),
-    scope: typing.Optional[str] = typer.Argument(default="", help=helpers["scope"]),
-    body: typing.Optional[str] = typer.Argument(default="", help=helpers["body"]),
-    footer: typing.Optional[str] = typer.Argument(default="", help=helpers["footer"]),
+    scope: typing.Optional[str] = typer.Option(
+        "", "--scope/ ", "-s/ ", help=helpers["scope"]
+    ),
+    body: typing.Optional[str] = typer.Option(
+        "", "--body/ ", "-b/ ", help=helpers["body"]
+    ),
+    footer: typing.Optional[str] = typer.Option(
+        "", "--foot/ ", "-f/ ", help=helpers["footer"]
+    ),
     breaking_changes: str = typer.Option(
-        default="",
+        "",
+        "--breaking-changes/ ",
+        "--bc/ ",
         help=helpers["breaking-changes"],
     ),
-    amend: bool = typer.Option(False, "--amend/ ", "-a/ ", help=helpers["amend"]),
-    no_verify: bool = typer.Option(
-        False, "--no-verify/ ", "--nv/ ", help=helpers["no-verify"]
-    ),
+    amend: bool = typer.Option(False, "--amend", help=helpers["amend"]),
+    no_verify: bool = typer.Option(False, "--no-verify", help=helpers["no-verify"]),
     co_authored_by: typing.Optional[typing.List[str]] = typer.Option(
         None,
         "--co-authored_by/ ",
         "--co/ ",
         help=helpers["co-authored-by"],
     ),
-    debug: bool = typer.Option(default=False, metavar="--debug"),
+    debug: bool = typer.Option(False, "--debug", help=helpers["debug"]),
+    info: typing.Optional[bool] = typer.Option(  # noqa: U100
+        None,
+        "--info",
+        callback=info_callback,
+        is_eager=True,
+        help=helpers["info"],
+    ),
+    version: typing.Optional[bool] = typer.Option(  # noqa: U100
+        None,
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+        help=helpers["version"],
+    ),
 ):
     cmd = commit_types.CommitCmd(
         type=commit_type,
@@ -69,7 +108,7 @@ def commit(
     if debug:
         typer.echo(repr(cmd))
     else:
-        os.system(repr(cmd))
+        os.system(repr(cmd))  # pragma: no cover
 
 
 if __name__ == "__main__":
