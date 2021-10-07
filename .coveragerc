@@ -1,6 +1,6 @@
 [run]
 source = convmoji
-omit = convmoji/main.py  # Temp till we build the wizard
+omit = convmoji/main.py
 
 [xml]
 output = coverage.xml
