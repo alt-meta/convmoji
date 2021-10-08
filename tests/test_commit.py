@@ -1,19 +1,27 @@
 from typer.testing import CliRunner
 
 from convmoji import __name__, __version__, __homepage__, __pypi__
-from convmoji.commit import app
+from convmoji.commit import app, err_messages
 
 runner = CliRunner()
-
-
-# TODO: check types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
-# TODO: test short options -a --co --nv
 
 
 def invoke_app_commit(*args):
     invoke_values = []
     invoke_values.extend(list(args))
     return runner.invoke(app, invoke_values)
+
+
+def test_app_commit_fail_001():
+    result = invoke_app_commit("")
+    assert result.exit_code == 1
+    assert err_messages["description"] in result.stdout
+
+
+def test_app_commit_fail_002(default_description: str):
+    result = invoke_app_commit(default_description, "testing")
+    assert result.exit_code == 1
+    assert err_messages["commit_type"] in result.stdout
 
 
 def test_app_commit_001_fix(default_description: str):

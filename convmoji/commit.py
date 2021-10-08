@@ -5,6 +5,7 @@ import typing
 import typer
 
 from convmoji import __version__, __homepage__, __pypi__, commit_types
+from convmoji.commit_types import possible_commit_types
 
 
 app = typer.Typer()
@@ -25,9 +26,23 @@ helpers = {
     "info": "Prompt convmoji info (does not execute commit)",
     "version": "Prompt convmoji version (does not execute commit)",
 }
+err_messages = {
+    "description": "Description for commit is required",
+    "commit_type": f"Commit type should be one of: {list(possible_commit_types.keys())}",
+}
+
+
+def validate_description(description_string: str) -> str:
+    if len(description_string) < 1:
+        typer.echo(err_messages["description"], err=True)
+        raise typer.Exit(code=1)
+    return description_string
 
 
 def validate_commit_type(type_string: str) -> str:
+    if type_string not in possible_commit_types.keys():
+        typer.echo(err_messages["commit_type"], err=True)
+        raise typer.Exit(code=1)
     commit_type = commit_types.CommitType(type=type_string)
     return commit_type.emoji
 
@@ -49,7 +64,9 @@ def version_callback(value: bool):
 
 @app.command()
 def commit(
-    description: str = typer.Argument(..., help=helpers["description"]),
+    description: str = typer.Argument(
+        ..., callback=validate_description, help=helpers["description"]
+    ),
     commit_type: typing.Optional[str] = typer.Argument(
         "feat",
         callback=validate_commit_type,
