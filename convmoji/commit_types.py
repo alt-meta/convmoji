@@ -1,5 +1,6 @@
 import typing
 
+import typer
 from pydantic import BaseModel, validator, root_validator
 
 
