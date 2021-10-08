@@ -1,5 +1,6 @@
 import typing
 
+import typer
 from pydantic import BaseModel, validator, root_validator
 
 # See: https://gist.github.com/parmentf/359667bf23e08a1bd8241fbf47ecdef0
@@ -22,14 +23,15 @@ class CommitType(BaseModel):
     type: str
     emoji: typing.Optional[str]
 
-    @validator("type")
+    @validator("type", allow_reuse=True)
     def validate_commit_type(cls, v: str):  # noqa: U100
         if v not in possible_commit_types.keys():
             raise ValueError(f"Commit type not in {possible_commit_types.keys()}")
         return v
 
     @root_validator
-    def find_emoji(cls, values: typing.Dict):  # noqa: U100
+    def find_emoji(cls, values: typing.Dict):
+        cls.validate_commit_type(values.get("type"))
         values["emoji"] = possible_commit_types[values.get("type")]
         return values
 
