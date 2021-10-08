@@ -80,54 +80,26 @@ For details on commit types see [conventional commits specification](https://www
 **Usage**:
 
 ```console
-$ [OPTIONS] COMMAND [ARGS]...
-```
-
-**Options**:
-
-* `--install-completion`: Install completion for the current shell.
-* `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
-* `--help`: Show this message and exit.
-
-**Commands**:
-
-* `commit`
-* `info`
-
-## `commit`
-
-**Usage**:
-
-```console
-$ commit [OPTIONS] DESCRIPTION COMMIT_TYPE [SCOPE] [BODY] [FOOTER]
+$ convmoji [OPTIONS] DESCRIPTION [COMMIT_TYPE]
 ```
 
 **Arguments**:
 
 * `DESCRIPTION`: Commit message, as in 'git commit -m "..."'  [required]
-* `COMMIT_TYPE`: Either of [feat, fix, docs, style, refactor, perf, test, build, ci, chore]  [required]
-* `[SCOPE]`: Scope for commit (any string)  [default: ]
-* `[BODY]`: Body message for commit  [default: ]
-* `[FOOTER]`: Footer message (formatted two blank lines below body)  [default: ]
+* `[COMMIT_TYPE]`: Either of [feat, fix, docs, style, refactor, perf, test, build, ci, chore]  [default: feat]
 
 **Options**:
 
-* `--breaking-changes TEXT`: Specially formatted message to show changes might break previous versions  [default: ]
-* `-a, --amend`: Execute commit with --amend  [default: False]
-* `--no-verify, --nv`: Execute commit with --no-verify  [default: False]
-* `--co-authored_by, --co TEXT`: A string of authors formatted like: --co-authored-by '<User user@no-reply> ' --co-authored-by '<User2 user2@no-reply>'
-* `--debug / --no-debug`: [default: False]
+* `-s, --scope TEXT`: Scope for commit (any string)  [default: ]
+* `-b, --body TEXT`: Body message for commit  [default: ]
+* `-f, --foot TEXT`: Footer message (formatted two blank lines below body)  [default: ]
+* `--breaking-changes, --bc TEXT`: Specially formatted message to show changes might break         previous versions  [default: ]
+* `--amend`: Execute commit with --amend  [default: False]
+* `--no-verify`: Execute commit with --no-verify  [default: False]
+* `--co-authored_by, --co TEXT`: A string of authors formatted like:        --co-authored-by '<User user@no-reply> '        --co-authored-by '<User2 user2@no-reply>'
+* `--debug`: Debug mode (does not execute commit)  [default: False]
+* `--info`: Prompt convmoji info (does not execute commit)
+* `--version`: Prompt convmoji version (does not execute commit)
+* `--install-completion`: Install completion for the current shell.
+* `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
 * `--help`: Show this message and exit.
-
-## `info`
-
-**Usage**:
-
-```console
-$ info [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
