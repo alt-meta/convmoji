@@ -1,12 +1,15 @@
 
-[![Build](https://github.com/KnowKit/convmoji/actions/workflows/build.yaml/badge.svg)](https://github.com/KnowKit/convmoji/actions/workflows/build.yaml)
-[![codecov](https://codecov.io/gh/KnowKit/convmoji/branch/main/graph/badge.svg?token=84LAM4S1RD)](https://codecov.io/gh/KnowKit/convmoji)
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![PyPI version](https://badge.fury.io/py/convmoji.svg)](https://badge.fury.io/py/convmoji)
+[![Test](https://github.com/KnowKit/convmoji/actions/workflows/test.yaml/badge.svg)](https://github.com/KnowKit/convmoji/actions/workflows/test.yaml)
+[![Codecov](https://codecov.io/gh/KnowKit/convmoji/branch/main/graph/badge.svg?token=84LAM4S1RD)](https://codecov.io/gh/KnowKit/convmoji)
+![PyPI](https://img.shields.io/pypi/v/convmoji?label=convmoji)
 
 # convmoji
 
 A simple cli tool to commit Conventional Commits.
+
+### Requirements
+
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/convmoji)
 
 ### Install
 

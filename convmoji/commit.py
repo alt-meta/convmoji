@@ -68,7 +68,9 @@ def commit(
         ..., callback=validate_description, help=helpers["description"]
     ),
     commit_type: typing.Optional[str] = typer.Argument(
-        "feat", callback=validate_commit_type, help=helpers["commit_type"],
+        "feat",
+        callback=validate_commit_type,
+        help=helpers["commit_type"],
     ),
     scope: typing.Optional[str] = typer.Option(
         "", "--scope/ ", "-s/ ", help=helpers["scope"]
@@ -80,16 +82,26 @@ def commit(
         "", "--foot/ ", "-f/ ", help=helpers["footer"]
     ),
     breaking_changes: str = typer.Option(
-        "", "--breaking-changes/ ", "--bc/ ", help=helpers["breaking-changes"],
+        "",
+        "--breaking-changes/ ",
+        "--bc/ ",
+        help=helpers["breaking-changes"],
     ),
     amend: bool = typer.Option(False, "--amend", help=helpers["amend"]),
     no_verify: bool = typer.Option(False, "--no-verify", help=helpers["no-verify"]),
     co_authored_by: typing.Optional[typing.List[str]] = typer.Option(
-        None, "--co-authored_by/ ", "--co/ ", help=helpers["co-authored-by"],
+        None,
+        "--co-authored_by/ ",
+        "--co/ ",
+        help=helpers["co-authored-by"],
     ),
     debug: bool = typer.Option(False, "--debug", help=helpers["debug"]),
     info: typing.Optional[bool] = typer.Option(  # noqa: U100
-        None, "--info", callback=info_callback, is_eager=True, help=helpers["info"],
+        None,
+        "--info",
+        callback=info_callback,
+        is_eager=True,
+        help=helpers["info"],
     ),
     version: typing.Optional[bool] = typer.Option(  # noqa: U100
         None,

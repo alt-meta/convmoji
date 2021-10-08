@@ -1,17 +1,9 @@
-name: Build
+name: Publish
 
 on:
   push:
-    paths:
-      - "convmoji/*"
-      - "tests/*"
-    branches:
-      - main
     tags:
       - "v*.*.*"
-
-  pull_request:
-    types: [opened, synchronize]
 
 jobs:
   test:
@@ -23,12 +15,14 @@ jobs:
         with:
           python-version: 3.8
       - uses: actions/cache@v2
-        id: test-cache
+        id: publish-cache
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-test
+          key: ${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}-publish
       - name: Install dependencies
         run: bash scripts/install-deps.sh
+      - name: Run lint
+        run: poetry run poe lint
       - name: Run tests
         run: poetry run poe coverage
       - name: Upload coverage to Codecov
