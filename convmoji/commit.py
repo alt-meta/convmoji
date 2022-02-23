@@ -23,6 +23,7 @@ helpers = {
         --co-authored-by '<User user@no-reply> '\
         --co-authored-by '<User2 user2@no-reply>'",
     "debug": "Debug mode (does not execute commit)",
+    "print": "Print the commit message (does not execute commit)",
     "info": "Prompt convmoji info (does not execute commit)",
     "version": "Prompt convmoji version (does not execute commit)",
 }
@@ -96,6 +97,7 @@ def commit(
         help=helpers["co-authored-by"],
     ),
     debug: bool = typer.Option(False, "--debug", help=helpers["debug"]),
+    print_message: bool = typer.Option(False, "--print", help=helpers["print"]),
     info: typing.Optional[bool] = typer.Option(  # noqa: U100
         None,
         "--info",
@@ -124,6 +126,8 @@ def commit(
     )
     if debug:
         typer.echo(repr(cmd))
+    elif print_message:
+        typer.echo(cmd.message_formatter())
     else:
         os.system(repr(cmd))  # pragma: no cover
 

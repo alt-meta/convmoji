@@ -47,7 +47,7 @@ class CommitCmd(BaseModel):
     no_verify: typing.Optional[bool]
     co_authored_by: typing.Optional[typing.List[str]]
 
-    def _message_formatter(self):
+    def message_formatter(self):
         message = self.description
         if self.body:
             message += f"\n\n{self.body}"
@@ -62,15 +62,18 @@ class CommitCmd(BaseModel):
                     [f"Co-authored-by: {author}" for author in self.co_authored_by]
                 ),
             )
-        return message
+        if self.breaking_changes:
+            self.type = f"{self.type}‼️"
+
+        if self.scope == "":
+            return f"{self.type}: {message}"
+
+        return f"{self.type}({self.scope}): {message}"
 
     def __repr__(self):
         optional_args = ""
         optional_args += "--amend " if self.amend else ""
         optional_args += "--no-verify " if self.no_verify else ""
-        if self.breaking_changes:
-            self.type = f"{self.type}‼️"
-        message = self._message_formatter()
-        if self.scope == "":
-            return f'{commit_cmd_base} "{self.type}: {message}" {optional_args}'
-        return f'{commit_cmd_base} "{self.type}({self.scope}): {message}" {optional_args}'
+
+        message = self.message_formatter()
+        return f'{commit_cmd_base} "{message}" {optional_args}'

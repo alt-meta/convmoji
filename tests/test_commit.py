@@ -235,3 +235,9 @@ def test_app_commit_info_007():
 def test_app_commit_version_008():
     result = invoke_app_commit("--version")
     assert f"{__name__} {__version__}" in result.stdout
+
+def test_print_message(default_description: str):
+    result = invoke_app_commit(default_description, "--print")
+    assert f"✨: {default_description}\n\n" == result.stdout
+
+
