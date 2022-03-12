@@ -1,3 +1,5 @@
+import re
+import subprocess
 import typing
 
 from pydantic import BaseModel, validator, root_validator
@@ -77,3 +79,41 @@ class CommitCmd(BaseModel):
 
         message = self.message_formatter()
         return f'{commit_cmd_base} "{message}" {optional_args}'
+
+
+class CommitScopes(BaseModel):
+    scopes: typing.Optional[typing.List[str]] = None
+
+    @validator("scopes", pre=True, always=True)
+    def find_commits(cls) -> typing.List[str]:  # noqa: U100
+        emojis = "".join(possible_commit_types.values())
+        scopes_pattern = re.compile(fr"[{emojis}]\(([\w_\-\d]*)\)")
+        messages = subprocess.check_output(["git", "log", '--pretty="%s"'])
+        scopes = []
+        if messages == 0:
+            return scopes  # pragma: no cover
+        else:
+            messages = messages.decode("utf-8").split("\n")
+            messages = list(
+                filter(
+                    lambda msg: (
+                        len(msg) > 0 and msg[1] in possible_commit_types.values()
+                    ),
+                    messages,
+                )
+            )
+            scopes = list(
+                set(
+                    map(
+                        lambda msg_pattern: msg_pattern.group(1),
+                        filter(
+                            lambda pattern: pattern is not None,
+                            map(lambda msg: scopes_pattern.search(msg), messages),
+                        ),
+                    )
+                )
+            )
+        return sorted(scopes)
+
+    def __repr__(self):
+        return "\n".join(self.scopes).strip()

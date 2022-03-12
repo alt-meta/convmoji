@@ -5,7 +5,7 @@ import typing
 import typer
 
 from convmoji import __version__, __homepage__, __pypi__, commit_types
-from convmoji.commit_types import possible_commit_types
+from convmoji.commit_types import CommitScopes, possible_commit_types
 
 
 app = typer.Typer()
@@ -24,6 +24,8 @@ helpers = {
         --co-authored-by '<User2 user2@no-reply>'",
     "debug": "Debug mode (does not execute commit)",
     "print": "Print the commit message (does not execute commit)",
+    "show-scopes": "A helper that shows scopes used with convmoji. "
+    "(does not execute commit)",
     "info": "Prompt convmoji info (does not execute commit)",
     "version": "Prompt convmoji version (does not execute commit)",
 }
@@ -48,19 +50,29 @@ def validate_commit_type(type_string: str) -> str:
     return commit_type.emoji
 
 
+def show_scopes_callback(value: bool):
+    if value:
+        scopes = CommitScopes()
+        typer.echo(repr(scopes))
+        raise typer.Exit(code=0)
+    return value
+
+
 def info_callback(value: bool):
-    if value is True:
+    if value:
         typer.echo("convmoji")
         typer.echo(f"version: {__version__}")
         typer.echo(f"homepage: {__homepage__}")
         typer.echo(f"pypi: {__pypi__}")
         raise typer.Exit(code=0)
+    return value
 
 
 def version_callback(value: bool):
-    if value is True:
+    if value:
         typer.echo(f"convmoji {__version__}")
         raise typer.Exit(code=0)
+    return value
 
 
 @app.command()
@@ -92,12 +104,19 @@ def commit(
     no_verify: bool = typer.Option(False, "--no-verify", help=helpers["no-verify"]),
     co_authored_by: typing.Optional[typing.List[str]] = typer.Option(
         None,
-        "--co-authored_by/ ",
+        "--co-authored-by/ ",
         "--co/ ",
         help=helpers["co-authored-by"],
     ),
     debug: bool = typer.Option(False, "--debug", help=helpers["debug"]),
     print_message: bool = typer.Option(False, "--print", help=helpers["print"]),
+    show_scopes: typing.Optional[bool] = typer.Option(  # noqa: U100
+        None,
+        "--show-scopes",
+        callback=show_scopes_callback,
+        is_eager=True,
+        help=helpers["show-scopes"],
+    ),
     info: typing.Optional[bool] = typer.Option(  # noqa: U100
         None,
         "--info",
