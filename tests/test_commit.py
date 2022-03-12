@@ -1,4 +1,6 @@
 import typing
+from unittest.mock import MagicMock, patch
+
 from typer.testing import CliRunner
 
 from convmoji import __name__, __version__, __homepage__, __pypi__
@@ -243,7 +245,12 @@ def test_print_message(default_description: str):
     assert f"✨: {default_description}\n\n" == result.stdout
 
 
-def test_show_scopes(expected_scopes: typing.List[str]):
+@patch("convmoji.commit_types.subprocess.run")
+def test_show_scopes(mock_run, default_stdout_return_value, expected_scopes: typing.List[str]):
+    mock_stdout = MagicMock()
+    mock_stdout.configure_mock(
+        **{"stdout.decode.return_value": default_stdout_return_value}
+    )
     result = invoke_app_commit("--show-scopes")
     output = list(filter(lambda res: len(res) > 0, result.stdout.split("\n")))
     assert len(output) >= 0

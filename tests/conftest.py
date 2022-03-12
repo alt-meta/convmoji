@@ -46,3 +46,36 @@ def expected_scopes() -> typing.List[str]:
         "trynerror",
         "cli-options",
     ]
+
+
+@pytest.fixture(scope="module")
+def default_stdout_return_value() -> str:
+    return """
+📦: v0.1.5
+Merge pull request #3 from KnowKit/feature/print-command
+✨: add new option print
+📦(readme): Actions update
+Merge branch 'main' of github.com:KnowKit/convmoji
+🚨: removed linter warnings
+✨(error-handling): 0.1.3
+📚(readme): Updated docs
+📚: merged README
+🔨(cli-options): v0.1.2
+📚(readme): Update to README.md
+🚨(coverage): Update .coveragerc
+Create LICENSE
+Update README.md
+📚(documentation): v0.1.1
+🚨: removed linter warnings
+📚(documentation): Docs, short options, helper strings
+📦(pipy): convmoji 0.1.0 Co-authored-by: defel <defel@no-reply>
+📚(README): Updated to docs
+✨: badges are fun
+🐛(action): fixed lint action
+🐛(trynerror): action fix
+🐛(trynerror): Small changes
+🚨: Updated --no-verify test
+🐛(actions): fixed install command in gh_actions
+✨‼️(project): initial commit
+✨: meine commit message
+"""

@@ -85,7 +85,7 @@ class CommitScopes(BaseModel):
     scopes: typing.Optional[typing.List[str]] = None
 
     @validator("scopes", pre=True, always=True)
-    def find_commits(cls) -> typing.List[str]:  # noqa: U100
+    def find_commits(cls, v: typing.Any) -> typing.List[str]:  # noqa: U100
         emojis = "".join(possible_commit_types.values())
         scopes_pattern = re.compile(fr"[{emojis}]\(([\w_\-\d]*)\)")
         messages = subprocess.check_output(["git", "log", '--pretty="%s"'])
