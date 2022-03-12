@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "convmoji"
-version = "0.1.5"
+version = "0.1.6"
 description = "A simple cli tool to commit Conventional Commits with emojis."
 authors = ["arrrrrmin <info@dotarmin.info>", "defel <defel@no-reply>"]
 maintainers = ["arrrrrmin <info@dotarmin.info>", "defel <defel@no-reply>"]
