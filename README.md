@@ -1,7 +1,7 @@
 
 [![Test](https://github.com/KnowKit/convmoji/actions/workflows/test.yaml/badge.svg)](https://github.com/KnowKit/convmoji/actions/workflows/test.yaml)
 [![Codecov](https://codecov.io/gh/KnowKit/convmoji/branch/main/graph/badge.svg?token=84LAM4S1RD)](https://codecov.io/gh/KnowKit/convmoji)
-![PyPI](https://img.shields.io/pypi/v/convmoji?label=convmoji)
+![PyPI](https://img.shields.io/pypi/v/convmoji?color=%234c1&label=convmoji)
 
 # convmoji
 
@@ -33,7 +33,29 @@ For details on commit types see [conventional commits spec](https://www.conventi
 * `ci`: 👷
 * `chore`: 🔧
 
-## Examples
+## Interactive Mode
+
+Use the interactive mode and be asked for different parameters. If you don't need them just skip with `Enter`.
+Convmojis interactive mode does not work with `--debug` but prompts for whether or not to execute the commit 
+(equivalent to `--print`).
+````
+convmoji -i
+? Your commit message (required) epic feature added
+? Choose a type (default is '✨:feat') (Use arrow keys)
+   ✨:feat
+   🐛:fix
+   📚:docs
+   💎:style
+   🔨:refactor
+   🚀:perf
+ » 🚨:test
+   📦:build
+   👷:ci
+   🔧:chore
+...
+````
+
+## Classic Mode
 
 A conventianal commit
 ````bash
