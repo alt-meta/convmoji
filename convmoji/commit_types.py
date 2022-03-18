@@ -40,8 +40,8 @@ class CommitType(BaseModel):
 
 class CommitCmd(BaseModel):
     type: str
-    scope: typing.Optional[str]
     description: str
+    scope: typing.Optional[str]
     body: typing.Optional[str]
     footer: typing.Optional[str]
     breaking_changes: typing.Optional[str]
@@ -88,31 +88,26 @@ class CommitScopes(BaseModel):
     def find_commits(cls, v: typing.Any) -> typing.List[str]:  # noqa: U100
         emojis = "".join(possible_commit_types.values())
         scopes_pattern = re.compile(fr"[{emojis}]\(([\w_\-\d]*)\)")
-        messages = subprocess.check_output(["git", "log", '--pretty="%s"'])
         scopes = []
-        if messages == 0:
-            return scopes  # pragma: no cover
-        else:
-            messages = messages.decode("utf-8").split("\n")
-            messages = list(
-                filter(
-                    lambda msg: (
-                        len(msg) > 0 and msg[1] in possible_commit_types.values()
+        messages = subprocess.check_output(["git", "log", '--pretty="%s"'])
+        messages = messages.decode("utf-8").split("\n")
+        messages = list(
+            filter(
+                lambda msg: (len(msg) > 0 and msg[1] in possible_commit_types.values()),
+                messages,
+            )
+        )
+        scopes = list(
+            set(
+                map(
+                    lambda msg_pattern: msg_pattern.group(1),
+                    filter(
+                        lambda pattern: pattern is not None,
+                        map(lambda msg: scopes_pattern.search(msg), messages),
                     ),
-                    messages,
                 )
             )
-            scopes = list(
-                set(
-                    map(
-                        lambda msg_pattern: msg_pattern.group(1),
-                        filter(
-                            lambda pattern: pattern is not None,
-                            map(lambda msg: scopes_pattern.search(msg), messages),
-                        ),
-                    )
-                )
-            )
+        )
         return sorted(scopes)
 
     def __repr__(self):

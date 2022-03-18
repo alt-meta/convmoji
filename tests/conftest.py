@@ -4,7 +4,7 @@ import pytest
 
 @pytest.fixture(scope="module")
 def default_description() -> str:
-    return "meine commit message"
+    return "my commit message"
 
 
 @pytest.fixture(scope="module")
@@ -48,7 +48,7 @@ def expected_scopes() -> typing.List[str]:
     ]
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def default_stdout_return_value() -> str:
     return """
 📦: v0.1.5
