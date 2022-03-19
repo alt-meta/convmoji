@@ -14,8 +14,8 @@ A simple cli tool to commit Conventional Commits.
 ### Install
 
 ```bash
-pip install convmoji
-convmoji --help
+python3 -m pip install convmoji
+convmoji --version
 ```
 
 ## Commit types
