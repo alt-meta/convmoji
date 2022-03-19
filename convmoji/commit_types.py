@@ -87,16 +87,16 @@ class CommitScopes(BaseModel):
     @validator("scopes", pre=True, always=True)
     def find_commits(cls, v: typing.Any) -> typing.List[str]:  # noqa: U100
         emojis = "".join(possible_commit_types.values())
-        scopes_pattern = re.compile(fr"[{emojis}]\(([\w_\-\d]*)\)")
-        scopes = []
-        messages = subprocess.check_output(["git", "log", '--pretty="%s"'])
-        messages = messages.decode("utf-8").split("\n")
-        messages = list(
-            filter(
-                lambda msg: (len(msg) > 0 and msg[1] in possible_commit_types.values()),
-                messages,
-            )
+        scopes_pattern = re.compile(rf"[{emojis}]\(([\w_\-\d]*)\)")
+        subprocess_result = subprocess.run(
+            ["git", "log", "--pretty='%s'"], capture_output=True
         )
+        messages = subprocess_result.stdout.decode("utf-8")
+        messages = [
+            msg
+            for msg in messages.split("\n")
+            if any((commit_type in msg for commit_type in possible_commit_types.values()))
+        ]
         scopes = list(
             set(
                 map(

@@ -79,6 +79,13 @@ class RequiredQuestion(BaseQuestion):
     type: str = "text"
 
 
+@dataclass
+class YNQuestion(BaseQuestion):
+    name: str
+    message: str
+    type: str = "confirm"
+
+
 def get_questions() -> typing.List[typing.Dict]:
     used_scopes = CommitScopes()
     name = RequiredQuestion.construct(
@@ -108,7 +115,6 @@ def get_questions() -> typing.List[typing.Dict]:
         scope.update(
             {"type": "autocomplete", "choices": used_scopes.scopes}
         )  # pragma: no cover
-
     body = DefaultQuestion.construct(name="body", message="Body text (optional)")
     footer = DefaultQuestion.construct(name="footer", message="Footer text (optional)")
     breaking_changes = DefaultQuestion.construct(
@@ -116,6 +122,9 @@ def get_questions() -> typing.List[typing.Dict]:
     )
     co_authored_by = DefaultQuestion.construct(
         name="co_authored_by", message="Co Authors (split by ',')"
+    )
+    execute = YNQuestion.construct(
+        name="execute", message="Execute command 'Y' or print only 'n'"
     )
     return [
         name,
@@ -125,13 +134,18 @@ def get_questions() -> typing.List[typing.Dict]:
         footer,
         breaking_changes,
         co_authored_by,
+        execute,
     ]
 
 
-def interactive_mode(mode: bool, ctx: typer.Context):
+def interactive_mode(mode: bool):
     if mode:
         # Ask the questions
-        answers = questionary.prompt(get_questions())
+        answers = questionary.prompt(
+            get_questions(), kbi_msg="Aborted, convmoji stopped."
+        )
+        if answers == {}:
+            raise typer.Exit(code=0)
         # Process answers
         answers["type"] = answers["type"].split(":")[0]
         if answers["co_authored_by"] == "":
@@ -142,11 +156,7 @@ def interactive_mode(mode: bool, ctx: typer.Context):
                 for author in answers["co_authored_by"].split(",")
                 if author
             ]
-        perform_command(
-            **answers,
-            debug=ctx.command.params[10].expose_value,
-            print_message=ctx.command.params[10].expose_value,
-        )
+        perform_command(**answers, debug=False, print_message=(not answers["execute"]))
         raise typer.Exit(code=0)
     return mode
 
