@@ -14,6 +14,7 @@ class Interactions(typing.TypedDict):
     footer: str
     breaking_changes: str
     co_authors: str
+    execute: str
 
 
 class KeyInputs:
@@ -39,3 +40,46 @@ def get_pipe_for_interaction(
     for action in interactions.values():
         input_pipe.send_text(action)
     return create_app_session(input=input_pipe, output=DummyOutput()), input_pipe
+
+
+interactions_expectations: typing.List[typing.Tuple[Interactions, str]] = [
+    (
+        Interactions(
+            msg="My commit message\n",
+            type="\n",
+            scope="\n",
+            body="\n",
+            footer="\n",
+            breaking_changes="\n",
+            co_authors="\n",
+            execute="n\n",
+        ),
+        "✨: My commit message",
+    ),
+    (
+        Interactions(
+            msg="Updated docs\n",
+            type=(KeyInputs.DOWN + KeyInputs.DOWN + KeyInputs.ENTER),
+            scope="web-docs\n",
+            body="\n",
+            footer="\n",
+            breaking_changes="\n",
+            co_authors="defel, arrrrrmin\n",
+            execute="n\n",
+        ),
+        "📚(web-docs): Updated docs\nCo-authored-by: defel\nCo-authored-by: arrrrrmin",
+    ),
+    (
+        Interactions(
+            msg="Hello, I cancel this process soon",
+            type=KeyInputs.CONTROLC,
+            scope="\n",
+            body="\n",
+            footer="\n",
+            breaking_changes="\n",
+            co_authors="\n",
+            execute="n\n",
+        ),
+        "Aborted, convmoji stopped.",
+    ),
+]

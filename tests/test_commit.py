@@ -6,8 +6,12 @@ from typer.testing import CliRunner
 
 from convmoji import __name__, __version__, __homepage__, __pypi__
 from convmoji.commit import app, err_messages
-from tests.utils import get_pipe_for_interaction, Interactions, KeyInputs
-
+from tests.utils import (
+    get_pipe_for_interaction,
+    Interactions,
+    KeyInputs,
+    interactions_expectations,
+)
 
 runner = CliRunner()
 
@@ -249,53 +253,26 @@ def test_print_message(default_description: str):
     assert f"✨: {default_description}\n\n" == result.stdout
 
 
-@patch("convmoji.commit_types.subprocess.check_output")
+@patch("convmoji.commit_types.subprocess.run")
 def test_show_scopes(
-    mock_run, default_stdout_return_value: str, expected_scopes: typing.List[str]
+    no_subprocess_mock,
+    default_stdout_return_value: str,
+    expected_scopes: typing.List[str],
 ):
     mock_stdout = MagicMock()
-    mock_stdout.configure_mock(
-        **{"stdout.decode.return_value": default_stdout_return_value}
-    )
+    mock_stdout.configure_mock(**{"stdout.decode.return_value": ""})
+    no_subprocess_mock.return_value = mock_stdout
     result = invoke_app_commit("--show-scopes")
     output = list(filter(lambda res: len(res) > 0, result.stdout.split("\n")))
     assert len(output) >= 0
     assert all(map(lambda scope: scope in expected_scopes, output))
 
 
-def interactions_expectations() -> typing.List[typing.Tuple[Interactions, str]]:
-    return [
-        (
-            Interactions(
-                msg="My commit message\n",
-                type="\n",
-                scope="\n",
-                body="\n",
-                footer="\n",
-                breaking_changes="\n",
-                co_authors="\n",
-            ),
-            "✨: My commit message",
-        ),
-        (
-            Interactions(
-                msg="Updated docs\n",
-                type=(KeyInputs.DOWN + KeyInputs.DOWN + KeyInputs.ENTER),
-                scope="web-docs\n",
-                body="\n",
-                footer="\n",
-                breaking_changes="\n",
-                co_authors="defel, arrrrrmin\n",
-            ),
-            "📚(web-docs): Updated docs\nCo-authored-by: defel\nCo-authored-by: arrrrrmin",
-        ),
-    ]
-
-
-@patch("convmoji.commit_types.subprocess.check_output")
-@pytest.mark.parametrize("interactions,expectation", interactions_expectations())
+@patch("convmoji.commit_types.subprocess.run")
+@patch("convmoji.commit.os.system")
+@pytest.mark.parametrize("interactions,expectation", interactions_expectations)
 def test_interactive_mode(
-    mock_run,
+    no_subprocess_mock,
     default_stdout_return_value: str,
     interactions: Interactions,
     expectation: str,
@@ -307,9 +284,8 @@ def test_interactive_mode(
             mock_stdout.configure_mock(
                 **{"stdout.decode.return_value": default_stdout_return_value}
             )
-            result = runner.invoke(app, ["-i", "--print"])
-            print(result.exit_code)
-            print(result.stdout)
+            no_subprocess_mock.return_value = mock_stdout
+            result = runner.invoke(app, ["-i"])
             assert result.exit_code == 0
             assert expectation in result.stdout
     finally:
