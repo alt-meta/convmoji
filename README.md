@@ -143,6 +143,7 @@ $ convmoji [OPTIONS] DESCRIPTION [COMMIT_TYPE]
 * `--amend`: Execute commit with --amend  [default: False]
 * `--no-verify`: Execute commit with --no-verify  [default: False]
 * `--co-authored_by, --co TEXT`: A string of authors formatted like: _`--co-authored-by '<User user@no-reply> '        --co-authored-by '<User2 user2@no-reply>'`_
+* `-i, --interactive`: Interactive mode
 * `--debug`: Debug mode (does not execute commit)  [default: False]
 * `--show-scopes`: A helper that shows scopes used with convmoji. (does not execute commit)
 * `--info`: Prompt convmoji info (does not execute commit)
